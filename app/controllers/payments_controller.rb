@@ -27,7 +27,8 @@ class PaymentsController < ApplicationController
     handle_callback do |payment|
       payment.complete!(params[:PayerID])
       flash[:notice] = 'Payment Transaction Completed'
-      payment_url(payment.identifier)
+      render json: {test: "abc"}
+      # payment_url(payment.identifier)
     end
   end
 
@@ -44,11 +45,11 @@ class PaymentsController < ApplicationController
   def handle_callback
     payment = Payment.find_by_token! params[:token]
     @redirect_uri = yield payment
-    if payment.popup?
-      render :close_flow, layout: false
-    else
-      redirect_to @redirect_uri
-    end
+    # if payment.popup?
+    #   render :close_flow, layout: false
+    # else
+    #   redirect_to @redirect_uri
+    # end
   end
 
   def paypal_api_error(e)
